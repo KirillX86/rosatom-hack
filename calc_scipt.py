@@ -52,7 +52,7 @@ class CaravanResult:
     caravans: List[Caravan]
 
 def calculate_weight(value, speed, type, name_ship):
-    if (type == 'Нет') or (type == 'Ice1') or (type == 'Ice2') or (type == 'Ice3'):
+    if (type == 'Нет') или (type == 'Ice1') или (type == 'Ice2') или (type == 'Ice3'):
         if value < 10:
             return -1
         if 10 <= value <= 14.5:
@@ -62,7 +62,7 @@ def calculate_weight(value, speed, type, name_ship):
         if value > 19.5:
             return speed
 
-    if (type == 'Arc 4') or (type == 'Arc 5') or (type == 'Arc 6'):
+    if (type == 'Arc 4') или (type == 'Arc 5') или (type == 'Arc 6'):
         if value < 10:
             return -1
         if 10 <= value <= 14.5:
@@ -82,7 +82,7 @@ def calculate_weight(value, speed, type, name_ship):
         if value > 19.5:
             return speed
 
-    if (type == 'Arc 9') and ((name_ship == 'Ямал') or (name_ship == '50 лет Победы')):
+    if (type == 'Arc 9') и ((name_ship == 'Ямал') или (name_ship == '50 лет Победы')):
         if value < 10:
             return -1
         if 10 <= value <= 14.5:
@@ -92,7 +92,7 @@ def calculate_weight(value, speed, type, name_ship):
         if value > 19.5:
             return speed
 
-    if (type == 'Arc 9') and ((name_ship == 'Вайгач') or (name_ship == 'Таймыр')):
+    if (type == 'Arc 9') и ((name_ship == 'Вайгач') или (name_ship == 'Таймыр')):
         if value < 10:
             return -1
         if 10 <= value <= 14.5:
@@ -254,7 +254,7 @@ def calc_schedule(tasks_df: pd.DataFrame, ice_breakers_df: pd.DataFrame, eps: fl
         problem, x = generate_lp_model(results, icebreakers)
 
         # Решение задачи линейного программирования
-        problem.solve(solver=cp.GLPK_MI)
+        problem.solve(solver=cp.SCIPY, scipy_options={"method": "highs"})
 
         # Формирование караванов на основе результатов линейного программирования
         for i in range(len(group)):
@@ -291,7 +291,7 @@ def calc_schedule(tasks_df: pd.DataFrame, ice_breakers_df: pd.DataFrame, eps: fl
                             icebreaker_schedule.append([caravan.lead_icebreaker_id, latitude, longitude, timestamp.isoformat(), '', '', ''])
     
     caravan_df = convert_caravan_result_to_df(CaravanResult(caravans=all_caravans))
-    icebreaker_schedule_df = pd.DataFrame(icebreaker_schedule, columns=['icebreaker_id', 'latitude', 'longitude', 'timestamp', 'vessel_id_1', 'vessel_id_2', 'vessel_id_3'])
+    icebreaker_schedule_df = pd.DataFrame(icebreaker_schedule, columns=['id_ледокола', 'широта', 'долгота', 'время_прохождения', 'id_судна_1', 'id_судна_2', 'id_судна_3'])
     
     return caravan_df, icebreaker_schedule_df
 
@@ -307,7 +307,7 @@ def convert_caravan_result_to_df(caravan_result: CaravanResult) -> pd.DataFrame:
                 icebreaker_id = caravan.lead_icebreaker_id if sailing_status == 1 else ''
                 data.append([vessel_id, latitude, longitude, timestamp.isoformat(), sailing_status, icebreaker_id, caravan_id])
     
-    df = pd.DataFrame(data, columns=['vessel_id', 'latitude', 'longitude', 'timestamp', 'sailing_status', 'icebreaker_id', 'caravan_id'])
+    df = pd.DataFrame(data, columns=['id_cудна', 'широта', 'долгота', 'время_прохождения', 'sailing_status', 'id_ледокола', 'id_каравана'])
     return df
 
 def build_ice_graph(ice_condition_map_df_dict: Dict[str, pd.DataFrame]) -> nx.Graph:
