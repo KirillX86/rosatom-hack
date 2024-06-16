@@ -10,8 +10,8 @@ from tools import make_way, ledokol_way, show_text_for_10_seconds
 # Загрузка данных
 points_df = pd.read_excel('./data/ГрафДанные.xlsx', sheet_name='points')
 edges_df = pd.read_excel('./data/ГрафДанные.xlsx', sheet_name='edges')
-data = pd.read_csv('./data/рэндомное_расписание_движения_судов.csv')
-ledokol = pd.read_csv('./data/рэндомное расписание ледоколов.csv', encoding='cp1251')
+data = pd.read_csv('./data/ships_mock.csv')
+ledokol = pd.read_csv('./data/ice_brakers_mock.csv', encoding='cp1251')
 
 
 task = st.file_uploader("Выберите файл с task", type=["xlsx"])
