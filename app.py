@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from calc_scipt import calc_schedule
-from tools import make_way, ledokol_way
+from tools import make_way, ledokol_way, show_text_for_10_seconds
 
 # Загрузка данных
 points_df = pd.read_excel('./data/ГрафДанные.xlsx', sheet_name='points')
@@ -21,6 +21,9 @@ if not task:
     task = "data/tasks_v1_2024-06-12.xlsx"
 if not start_positions:
     start_positions = "data/Ice_brakers_start_positions.xlsx"
+
+if st.button('Рассчитать'):
+    show_text_for_10_seconds('Расписание будет выгружено в файлы boats.csv, icebreakers.csv')
 
 data, ledokol = calc_schedule(
     pd.read_excel(task), #task
@@ -127,3 +130,17 @@ fig.update_layout(xaxis_title="Время",
 # Streamlit
 st.title("Диаграмма Ганта движения кораблей по СМП")
 st.plotly_chart(fig)
+
+st.sidebar.download_button(
+    label="Скачать расписание судов",
+    data=data.to_csv(index=False).encode('utf-8'),
+    file_name='boats.csv',
+    mime='text/csv',
+)
+
+st.sidebar.download_button(
+    label="Скачать расписание ледоколов",
+    data=ledokol.to_csv(index=False).encode('utf-8'),
+    file_name='icebreakers.csv',
+    mime='text/csv',
+)

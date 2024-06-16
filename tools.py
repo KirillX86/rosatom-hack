@@ -1,6 +1,8 @@
 import pandas as pd
 import folium
 import random
+import time
+import streamlit as st
 
 colors = ['red', 'pink', 'lightred', 'purple', 'darkblue', 'lightgray', 'blue', 'beige', 'lightgreen', 'white', 'green', 'darkred', 'cadetblue', 'gray', 'darkgreen', 'orange', 'darkpurple', 'lightblue']
 
@@ -39,3 +41,14 @@ def ledokol_way(mapp, group):
     for i in range(len(group) - 1):
         points = group[['широта', 'долгота']].iloc[i:i+2].values.tolist()
         folium.PolyLine(points, color=color, weight=15, opacity=0.35).add_to(mapp)
+
+
+
+# Функция для отображения текста на 10 секунд
+def show_text_for_10_seconds(text):
+    placeholder = st.empty()  # Создаем временное место для отображения текста
+    placeholder.text(text)
+    
+    time.sleep(10)  # Ждем 10 секунд
+    
+    placeholder.empty()  # Очищаем текст
