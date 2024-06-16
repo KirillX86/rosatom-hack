@@ -8,18 +8,18 @@ def make_way(mapp, group):
     color = random.choice(colors)
     # Добавляем точки на карту
     for idx, row in group.iterrows():
-        popup_text = f"Время: {'<br>'.join(row['time'][:-3].split('T'))}"
-        if pd.notna(row['icebreaker_id']):
-            popup_text += f"<br>Ледокол: {row['icebreaker_id']}"
+        popup_text = f"Время: {'<br>'.join(row['время_прохождения'][:-3].split('T'))}"
+        if pd.notna(row['id_ледокола']):
+            popup_text += f"<br>Ледокол: {row['id_ледокола']}"
         folium.Marker(
-            location=[row["lat"], row["lon"]],
+            location=[row["широта"], row["долгота"] + 0.1],
             popup=popup_text,
             icon=folium.Icon(color=color, prefix='fa', icon='sailboat' )
         ).add_to(mapp)
         
     # Добавляем линии между точками
     for i in range(len(group) - 1):
-        points = group[['lat', 'lon']].iloc[i:i+2].values.tolist()
+        points = group[['широта', 'долгота']].iloc[i:i+2].values.tolist()
         folium.PolyLine(points, color=color, weight=2.5, opacity=1).add_to(mapp)
 
 def ledokol_way(mapp, group):
